@@ -1198,9 +1198,9 @@ int main()
 
 #endif
 
-   f = fopen("mach_desc.h", "w");
+   f = fopen("NTL/mach_desc.h", "w");
    if (!f) {
-      fprintf(stderr, "can't open mach_desc.h for writing\n");
+      fprintf(stderr, "can't open NTL/mach_desc.h for writing\n");
       return 1;
    }
 
