@@ -3,6 +3,11 @@
 
 for f in $1
 do
+  touch "NTL/HAVE_$f.h"
+done 
+
+for f in $1
+do
 
    printf '*** Checking for feature: %s ' "$f"
 

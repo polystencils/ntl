@@ -130,11 +130,13 @@ add_custom_command(
 	OUTPUT ${DESC_HEADER}
 	COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/NTL"
 	COMMAND $<TARGET_FILE:MakeDesc>
-	COMMENT "Generate machine description ..."
+	COMMENT "Generating machine description ..."
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	DEPENDS MakeDesc)
 set_source_files_properties("${DESC_HEADER}" PROPERTIES GENERATED TRUE)
 LIST(APPEND SRC ${DESC_HEADER})
+
+add_custom_target(desc_header DEPENDS ${DESC_HEADER})
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Generators/MakeGmpAux)
 
@@ -142,9 +144,9 @@ add_custom_command(
 	OUTPUT ${GMP_HEADER}
 	COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/NTL"
 	COMMAND $<TARGET_FILE:MakeGmpAux> >${GMP_HEADER}
-	COMMENT "Generate GMP header ..."
+	COMMENT "Generating GMP header ..."
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	DEPENDS MakeGmpAux ${DESC_HEADER})
+	DEPENDS MakeGmpAux MakeDesc)
 set_source_files_properties("${GMP_HEADER}" PROPERTIES GENERATED TRUE)
 LIST(APPEND SRC ${GMP_HEADER})
 
@@ -152,6 +154,5 @@ add_library(${PROJECT_NAME} SHARED ${SRC})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GMP_INCLUDES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_compile_definitions(${PROJECT_NAME} PRIVATE NTL_GMP_LIP=on)
 target_link_libraries(${PROJECT_NAME} ${GMP_LIBRARIES})
 
