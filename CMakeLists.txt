@@ -111,6 +111,9 @@ set(FEATURE_HEADERS
 set(DESC_HEADER
 	"${CMAKE_CURRENT_BINARY_DIR}/NTL/mach_desc.h")
 
+set(GMP_HEADER
+	"${CMAKE_CURRENT_BINARY_DIR}/NTL/gmp_aux.h")
+
 add_custom_command(
 	OUTPUT ${FEATURE_HEADERS}
 	COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/NTL"
@@ -132,6 +135,18 @@ add_custom_command(
 	DEPENDS MakeDesc)
 set_source_files_properties("${DESC_HEADER}" PROPERTIES GENERATED TRUE)
 LIST(APPEND SRC ${DESC_HEADER})
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Generators/MakeGmpAux)
+
+add_custom_command(
+	OUTPUT ${GMP_HEADER}
+	COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/NTL"
+	COMMAND $<TARGET_FILE:MakeGmpAux> >${GMP_HEADER}
+	COMMENT "Generate GMP header ..."
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	DEPENDS MakeGmpAux ${DESC_HEADER})
+set_source_files_properties("${GMP_HEADER}" PROPERTIES GENERATED TRUE)
+LIST(APPEND SRC ${GMP_HEADER})
 
 add_library(${PROJECT_NAME} SHARED ${SRC})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GMP_INCLUDES})
