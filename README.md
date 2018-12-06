@@ -1,7 +1,9 @@
 # NTL - a library for doing numbery theory
 
 **Version: 11.3.2**
+
 **Release date: 2018.11.15**
+
 **Author: Victor Shoup (victor@shoup.net)**
 
 NTL is open-source software distributed under the terms of the GNU Lesser
